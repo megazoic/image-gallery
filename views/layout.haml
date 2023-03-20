@@ -1,0 +1,38 @@
+!!! 5
+%html
+  %head
+    %title Astrobro Gallery
+    %meta(charset="utf-8")
+    %link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
+    %link(rel="stylesheet" href="/css/app.css")
+    %link(rel="stylesheet" href="/css/lightbox.css")
+    %script(src="https://code.jquery.com/jquery-2.1.4.min.js")
+    %script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
+    %script(src="/js/lightbox.min.js")
+    %script(src="https://jsuites.net/v4/jsuites.js")
+    %script(src="https://jsuites.net/v4/jsuites.webcomponents.js")
+    %link(rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css")
+  %body
+    #wrapper
+
+      #header
+
+        %h1 Nick's photo gallery
+
+      .content
+
+        = yield
+
+      #side_bar
+
+        %h1 Side Bar
+
+        %p
+
+          This is the side bar of the webpage
+
+      #footer
+
+        %p
+
+          This is the footer.

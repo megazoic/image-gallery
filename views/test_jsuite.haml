@@ -1,0 +1,11 @@
+%h1 Autocomplete
+
+%div{:id => "tags-local"}
+
+%input{:type => "button", :value => "Get the values", :onclick => 'alert(tagsLocal.getValue())'}
+
+:javascript
+	var tagsLocal = jSuites.tags(document.getElementById('tags-local'), {
+		search: #{@list},
+		placeholder: 'Fruits'
+	});
