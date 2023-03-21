@@ -38,5 +38,18 @@ namespace :db do
       Sequel::Migrator.run(db, "db/migrations")
     end
   end
-
+  desc "Testing fill tags"
+  task :add_tags do
+    require "sequel"
+    DB = Sequel.connect(ENV.fetch("DATABASE_URL"))
+    tags = DB[:tags]
+    particulars = ['astro', 'beach', 'fam', 'city', 'mountains']
+    particulars.each do |m|
+      tags.insert(name: m)
+    end
+  end
+  desc "find out existing env"
+  task :display_env do
+    puts ENV.fetch("DATABASE_URL")
+  end
 end

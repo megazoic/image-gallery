@@ -55,6 +55,7 @@ GEM
     rack (2.2.6.4)
     rack-protection (3.0.5)
       rack
+    rake (13.0.6)
     rmagick (5.2.0)
       pkg-config (~> 1.4)
     ruby-vips (2.1.4)
@@ -84,6 +85,7 @@ DEPENDENCIES
   haml
   pry-byebug
   puma
+  rake
   rmagick
   sequel
   sinatra

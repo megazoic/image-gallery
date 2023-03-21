@@ -1,6 +1,5 @@
 class App < Sinatra::Base
   set :haml, { escape_html: false }
-
   get "/" do
     @auth = authorized?
     @images = Image.all
