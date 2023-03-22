@@ -2,6 +2,11 @@ class App < Sinatra::Base
   set :haml, { escape_html: false }
   get "/" do
     @auth = authorized?
+    tag_list = Tag.select(:name).all
+    @list = []
+    tag_list.each do |t|
+      @list << t[:name]
+    end
     @images = Image.all
     haml :index
   end
@@ -18,14 +23,40 @@ class App < Sinatra::Base
 
   post "/images" do
     protected!
-    @image = Image.new params[:image]
-    @image.save
+    tags = DB[:tags]
+    puts params
+    if params[:image].has_key?("file")
+      image = Image.new params[:image]
+      saved_image = image.save
+      if !params[:image_tags].empty?
+        #expecting a string with either a single tag or multiple tags separated by commas
+        params[:image_tags].split(',').each do |str|
+          #see if this tag exists
+          this_tag = Tag.where(name: str).first
+          if this_tag.nil?
+            #need to enter tag before assigning it to 
+            saved_tag = tags.insert(name: str)
+            saved_image.add_tag(saved_tag)
+          else
+            saved_image.add_tag(this_tag)
+          end
+        end
+      end
+    end
     redirect "/"
   end
   
   get "/test_jsuite" do
-    @list = ["apple", "orange", "pear"]
+    tag_list = Tag.select(:name).all
+    @list = []
+    tag_list.each do |t|
+      @list << t[:name]
+    end
     haml :test_jsuite
+  end
+  post "/test_jsuite" do
+    puts params
+    "done"
   end
 
   helpers do

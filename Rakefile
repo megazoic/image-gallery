@@ -3,6 +3,8 @@ require 'fileutils'
 
 namespace :db do
   MIGRATIONS_DIR = 'db/migrations'
+  require "sequel"
+  DB = Sequel.connect(ENV.fetch("DATABASE_URL"))
 
   desc "generates a migration file with a timestamp and name"
   task :generate_migration, :name do |_, args|
@@ -40,14 +42,23 @@ namespace :db do
   end
   desc "Testing fill tags"
   task :add_tags do
-    require "sequel"
-    DB = Sequel.connect(ENV.fetch("DATABASE_URL"))
     tags = DB[:tags]
     particulars = ['astro', 'beach', 'fam', 'city', 'mountains']
     particulars.each do |m|
       tags.insert(name: m)
     end
   end
+  desc "Reset images, tags and associations"
+  task :reset_db do
+    images_tags = DB[:images_tags]
+    images_tags.delete
+    images = DB[:images]
+    images.where{id > 2}.delete
+    tags = DB[:tags]
+    tags.where{id > 5}.delete
+  end
+end
+namespace :app do
   desc "find out existing env"
   task :display_env do
     puts ENV.fetch("DATABASE_URL")

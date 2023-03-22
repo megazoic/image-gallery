@@ -5,3 +5,4 @@ env_vars
 
 *.sqlite3
 
+public/uploads/*

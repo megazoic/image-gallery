@@ -1,11 +1,20 @@
 %h1 Autocomplete
 
-%div{:id => "tags-local"}
+%form(action="/test_jsuite" method="post")
+	%p
+	%div{:id => "tags-local"}
 
-%input{:type => "button", :value => "Get the values", :onclick => 'alert(tagsLocal.getValue())'}
-
-:javascript
-	var tagsLocal = jSuites.tags(document.getElementById('tags-local'), {
-		search: #{@list},
-		placeholder: 'Fruits'
-	});
+	-#%input{:type => "button", :value => "Get the values", :onclick => 'alert(tagsLocal.getValue())'}
+	%input{:type => "hidden", :id => "mytags", :name => "mytags"}
+	:javascript
+		var tagsLocal = jSuites.tags(document.getElementById('tags-local'), {
+			search: #{@list},
+			placeholder: 'None'
+		});
+		var writeTags = function (){
+			document.getElementById("mytags").value = tagsLocal.getValue();
+			return;
+		};
+	%p
+		-#%button(class="btn btn-primary") Tagme!
+	%input{:type => "submit", :value => "Submit tags", :onclick => 'writeTags()'}
