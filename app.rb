@@ -34,7 +34,7 @@ class App < Sinatra::Base
           #see if this tag exists
           this_tag = Tag.where(name: str).first
           if this_tag.nil?
-            #need to enter tag before assigning it to 
+            #need to enter tag before assigning it 
             saved_tag = tags.insert(name: str)
             saved_image.add_tag(saved_tag)
           else
