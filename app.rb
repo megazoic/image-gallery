@@ -1,3 +1,13 @@
+=begin
+require 'sinatra'
+require 'sequel'
+DB = Sequel.connect "sqlite://db/development.sqlite3"
+require 'carrierwave'
+require_relative 'lib/image_uploader'
+require_relative 'lib/image'
+require_relative 'lib/tag'
+=end
+
 class App < Sinatra::Base
   set :haml, { escape_html: false }
   get "/" do
@@ -55,8 +65,15 @@ class App < Sinatra::Base
     haml :test_jsuite
   end
   post "/test_jsuite" do
-    puts params
-    "done"
+    #params = {"mytags"=>"sitting,watercolor"}
+    images = []
+    params["mytags"].split(",").each do |tag_string|
+      tag_object = Tag.where(name: tag_string).first
+      images << tag_object.images
+    end
+    @images = images.flatten
+    @images = @images.uniq {|i| i.title}
+    haml :subset
   end
 
   helpers do

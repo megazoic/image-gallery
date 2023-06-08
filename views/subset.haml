@@ -1,0 +1,13 @@
+%h1 A subset of images
+
+.row
+	%ul.list-unstyled
+		-@images.each do |image|
+			%li.col-md-4
+				%h2
+					=image.title
+					| tags: 
+					-image.tags.each do |tag|
+						=tag.name
+				%a{href: image.file, data: {lightbox: "gallery", title: image.title}}
+					%img{src: image.file.url(:small), width: "50%"}

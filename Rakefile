@@ -1,11 +1,12 @@
 # Rakefile
 require 'fileutils'
+require 'logger'
 
 namespace :db do
   MIGRATIONS_DIR = 'db/migrations'
   require "sequel"
-  DB = Sequel.connect(ENV.fetch("DATABASE_URL"))
-
+  DB = Sequel.connect(ENV.fetch("DATABASE_URL"), logger: Logger.new($stdout))
+  #DB.sql_log_level = :debug
   desc "generates a migration file with a timestamp and name"
   task :generate_migration, :name do |_, args|
     args.with_defaults(name: 'migration')
@@ -34,10 +35,10 @@ namespace :db do
     db = Sequel.connect(ENV.fetch("DATABASE_URL"))
     if args[:version]
       puts "Migrating to version #{args[:version]}"
-      Sequel::Migrator.run(db, "db/migrations", target: args[:version].to_i)
+      Sequel::Migrator.run(db, "./db/migrations", target: args[:version].to_i)
     else
       puts "Migrating to latest"
-      Sequel::Migrator.run(db, "db/migrations")
+      Sequel::Migrator.run(db, "./db/migrations")
     end
   end
   desc "Testing fill tags"
