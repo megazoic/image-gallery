@@ -4,9 +4,10 @@
 	%ul.list-unstyled
 		-@images.each do |image|
 			%li.col-md-4
-				%h2
+				%a{href: "/images/edit/#{image.id}"}
 					=image.title
-					| tags: 
+					%br
+					tags: 
 					-image.tags.each do |tag|
 						=tag.name
 				%a{href: image.file, data: {lightbox: "gallery", title: image.title}}
