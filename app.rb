@@ -23,7 +23,57 @@ class App < Sinatra::Base
 
   get "/images/:id" do
     @image = Image[params[:id]]
+    @image_tags = ""
+    @image.tags.each do |tag|
+      @image_tags << "#{tag[:name]},"
+    end
+    @image_tags.chop!
     haml :show
+  end
+  
+  get "/images/edit/:id" do
+    #need a list of all tags, tags assoc with this image and image title
+    @image = Image[params[:id].to_i]
+    image_tags = @image.tags
+    @image_tags = ""
+    image_tags.each do |it|
+      @image_tags << "#{it[:name]},"
+    end
+    @image_tags.chop!
+    all_tags = Tag.select(:name).all
+    @tag_list = []
+    all_tags.each do |t|
+      @tag_list << t[:name]
+    end
+    haml :edit
+  end
+  
+  post "/images/edit" do
+    #params = {"image_tags"=>"sitting,watercolor,newish", "image_id"=>"2", "image_title"=>"japanese landscape"}
+    images = DB[:images]
+    tags = DB[:tags]
+    tag_ids = []
+    params[:image_tags].split(",").each do |it|
+      #there may be new tags
+      tag = nil
+      tag = Tag.where(name: it).first
+      if tag.nil?
+        t = Tag.new(name: it)
+        t.save
+        tag_ids << t.id
+      else
+        tag_ids << tag[:id]
+      end
+    end
+    #associate tags with image
+    Image[id: params[:image_id]].remove_all_tags
+    tag_ids.each do |ti|
+      t = Tag[ti]
+      Image[id: params[:image_id]].add_tag(t)
+    end
+    #update title
+    Image[id: params[:image_id]].update(title: params[:image_title])
+    redirect "/images/#{params[:image_id]}"
   end
 
   get "/auth" do
@@ -34,7 +84,6 @@ class App < Sinatra::Base
   post "/images" do
     protected!
     tags = DB[:tags]
-    puts params
     if params[:image].has_key?("file")
       image = Image.new params[:image]
       saved_image = image.save

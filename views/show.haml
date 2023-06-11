@@ -1,0 +1,11 @@
+%h1 Chosen image
+%a{href: "/images/edit/#{@image.id}"}
+	Edit
+%br
+=@image.title
+| tags: 
+-@image.tags.each do |tag|
+	=tag.name
+%br
+%a{href: @image.file, data: {lightbox: "gallery", title: @image.title}}
+	%img{src: @image.file.url(:small), width: "50%"}

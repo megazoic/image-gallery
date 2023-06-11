@@ -1,0 +1,28 @@
+%h1 Edit image meta
+
+%form(action="/images/edit" method="post" enctype="multipart/form-data")
+	%p
+		%input(type="hidden" name="image_tags" id="image_tags" value = "astro,city")
+		%input(type="hidden" name="image_id" value="#{@image[:id]}")
+	%p
+		%label{:for => "name"} Image Title
+		%input(type="text" name="image_title" class="form-control" value="#{@image[:title]}")
+	%p
+		%h5 Available tags
+	%p
+		-@tag_list.each do |t|
+			=t
+	%p
+		%h5 Assigned tags
+	%div{:id => "tags-local"}
+	:javascript
+		var tagsLocal = jSuites.tags(document.getElementById('tags-local'), {
+			search: #{@tag_list},
+			value: "#{@image_tags}"
+		});
+		var writeTags = function (){
+			document.getElementById("image_tags").value = tagsLocal.getValue();
+			return;
+		};
+	%p
+		%input{:type => "submit", :value => "Submit", :onclick => 'writeTags()'}
