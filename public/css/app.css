@@ -5,7 +5,11 @@
     margin:auto;
 
 }
+body {
 
+        background-color:#47453d;
+	
+}
 #header{
 
     background-color:#ade;
@@ -31,20 +35,6 @@ h2{
     margin:12px 0;
 
     float:left;
-
-}
-
-#side_bar{
-
-    margin:12px 0;
-
-    width :30%;
-
-    float:right;
-
-    clear:none;
-
-    background-color:#ddd;
 
 }
 

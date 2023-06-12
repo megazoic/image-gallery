@@ -32,6 +32,7 @@ class App < Sinatra::Base
   end
   
   get "/images/edit/:id" do
+    protected!
     #need a list of all tags, tags assoc with this image and image title
     @image = Image[params[:id].to_i]
     image_tags = @image.tags
@@ -49,6 +50,7 @@ class App < Sinatra::Base
   end
   
   post "/images/edit" do
+    protected!
     #params = {"image_tags"=>"sitting,watercolor,newish", "image_id"=>"2", "image_title"=>"japanese landscape"}
     images = DB[:images]
     tags = DB[:tags]
@@ -105,26 +107,6 @@ class App < Sinatra::Base
     redirect "/"
   end
   
-  get "/test_jsuite" do
-    tag_list = Tag.select(:name).all
-    @list = []
-    tag_list.each do |t|
-      @list << t[:name]
-    end
-    haml :test_jsuite
-  end
-  post "/test_jsuite" do
-    #params = {"mytags"=>"sitting,watercolor"}
-    images = []
-    params["mytags"].split(",").each do |tag_string|
-      tag_object = Tag.where(name: tag_string).first
-      images << tag_object.images
-    end
-    @images = images.flatten
-    @images = @images.uniq {|i| i.title}
-    haml :subset
-  end
-
   helpers do
     def protected!
       return if authorized?
