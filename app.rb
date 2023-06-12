@@ -134,7 +134,7 @@ class App < Sinatra::Base
 
     def authorized?
       @auth ||= Rack::Auth::Basic::Request.new(request.env)
-      @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == ['jose', 'my_special_password']
+      @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == [ENV["MY_SECRET_USER"], ENV["MY_SECRET_PWD"]]
     end
   end
 end
