@@ -86,8 +86,10 @@ class App < Sinatra::Base
       t = Tag[ti]
       Image[id: params[:image_id]].add_tag(t)
     end
-    #update title
+    #update title and notes
     Image[id: params[:image_id]].update(title: params[:image_title])
+    Image[id: params[:image_id]].update(description: params[:description])
+    
     redirect "/images/#{params[:image_id]}"
   end
 

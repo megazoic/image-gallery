@@ -8,6 +8,9 @@
 		%label{:for => "name"} Image Title
 		%input(type="text" name="image_title" class="form-control" value="#{@image[:title]}")
 	%p
+		%label{:for => "description"} Notes
+		%input(type="text" name="description" class="form-control" value="#{@image[:description]}")
+	%p
 		%h5 Available tags
 	%p
 		-@tag_list.each do |t|

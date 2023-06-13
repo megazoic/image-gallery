@@ -1,3 +1,4 @@
+
 #wrapper{
 
     width:66%;
@@ -30,6 +31,10 @@ h2{
 
 }
 
+h3{
+	color:#754a2a;
+}
+
 #content{
 
     margin:12px 0;
@@ -41,6 +46,7 @@ h2{
 h1{
 
     font-size:150%;
+    color:#754a2a;
 
 }
 
