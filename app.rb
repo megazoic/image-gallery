@@ -27,12 +27,16 @@ class App < Sinatra::Base
     DB.transaction do
       image.remove_all_tags
       #need to remove image file from file system (public/uploads/<image file>)
-      filename = image.file
-      path = "./public#{filename}"
-      if File.exist?(path)
-        File.delete(path) if File.exist?(path)
-      else
-        raise StandardError.new "No such file"
+      cwFilename = image.file
+      #filename has /uploads/ prefix eg. /uploads/Screen_Shot_2023-06-05_at_7.43.46_AM.png
+      m = /\/uploads\/(.*)/.match(cwFilename.url)
+      filename = m[1]
+      ["./public/uploads/#{filename}", "./public/uploads/small_#{filename}"].each do |fp|
+        if File.exist?(fp)
+          File.delete(fp)
+        else
+          raise StandardError.new "No such file"
+        end
       end
       #finally, delete record
       image.delete
