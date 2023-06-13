@@ -1,13 +1,3 @@
-=begin
-require 'sinatra'
-require 'sequel'
-DB = Sequel.connect "sqlite://db/development.sqlite3"
-require 'carrierwave'
-require_relative 'lib/image_uploader'
-require_relative 'lib/image'
-require_relative 'lib/tag'
-=end
-
 class App < Sinatra::Base
   set :haml, { escape_html: false }
   get "/" do
@@ -29,6 +19,25 @@ class App < Sinatra::Base
     end
     @image_tags.chop!
     haml :show
+  end
+  
+  get "/images/delete/:id" do
+    #clean out images_tags first
+    image = Image[params[:id].to_i]
+    DB.transaction do
+      image.remove_all_tags
+      #need to remove image file from file system (public/uploads/<image file>)
+      filename = image.file
+      path = "./public#{filename}"
+      if File.exist?(path)
+        File.delete(path) if File.exist?(path)
+      else
+        raise StandardError.new "No such file"
+      end
+      #finally, delete record
+      image.delete
+    end
+    "done"
   end
   
   get "/images/edit/:id" do

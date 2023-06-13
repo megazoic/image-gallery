@@ -1,6 +1,10 @@
 %h1 Chosen image
 %a{href: "/images/edit/#{@image.id}"}
-	Edit
+	Edit 
+	| 
+
+%a{href: "/images/delete/#{@image.id}", onclick: "return confirm('Are you sure?')"}
+	Delete
 %br
 =@image.title
 | tags: 
